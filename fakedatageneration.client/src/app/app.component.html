@@ -1,0 +1,97 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col mt-3">
+        <div class="form-group mb-3">
+            <label for="regionSelect">Select Region:</label>
+            <select
+            class="form-control"
+            id="regionSelect"
+            [(ngModel)]="selectedRegion"
+            (ngModelChange)="regenerateTable()"
+            >
+            <option value="0">Russia</option>
+            <option value="1">America</option>
+            <option value="2">Poland</option>
+            </select>
+        </div>
+        </div>
+        <div class="col mt-3">
+        <div class="form-group mb-3">
+            <label for="errorsSlider">Errors Amount:</label>
+            <div class="d-flex align-items-center">
+            <input
+                type="range"
+                class="form-control-range mr-2"
+                id="errorsSlider"
+                min="0"
+                max="10"
+                [(ngModel)]="sliderErrorsAmount"
+                (ngModelChange)="errorSliderChangeHandler()"
+            />
+            <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="inputErrorsAmount"
+                (ngModelChange)="errorInputChangeHandler()"
+                min="0"
+                max="1000"
+                step="0.5"
+            />
+            </div>
+        </div>
+        </div>
+        <div class="col mt-3">
+        <div class="form-group mb-3">
+            <label for="seedInput">Seed:</label>
+            <div class="input-group">
+            <input
+                type="number"
+                class="form-control"
+                id="seedInput"
+                [(ngModel)]="selectedSeed"
+                (ngModelChange)="regenerateTable()"
+            />
+            <div class="input-group-append">
+                <button
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="generateRandomSeed()"
+                >
+                Random
+                </button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody
+        *ngIf="paginator$ | async as paginator"
+        class="scrollable-tbody"
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        (scrolled)="loadMoreUsers(paginator)"
+      >
+        <tr *ngFor="let user of paginator.items">
+          <td>{{ user.index }}</td>
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.address }}</td>
+          <td>{{ user.phoneNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-center my-3" *ngIf="loading$ | async">Loading...</p>
+</div>
